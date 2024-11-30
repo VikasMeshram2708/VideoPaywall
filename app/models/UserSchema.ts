@@ -36,3 +36,10 @@ export const loginSchema = z.object({
 });
 
 export type loginSchema = z.infer<typeof loginSchema>;
+
+export const profileSchema = z.object({
+  id: z.string().cuid(),
+  email: z.string().email(),
+});
+
+export type profileSchema = z.infer<typeof profileSchema>;

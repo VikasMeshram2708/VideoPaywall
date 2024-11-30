@@ -8,7 +8,7 @@ import { LogOut } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 
 export default function Navbar() {
-  const { data } = useSession();
+  const { data, status } = useSession();
 
   if (!data) {
     return (
@@ -18,9 +18,13 @@ export default function Navbar() {
             <Link href="/">Vide Paywall</Link>
           </h1>
           <div className="flex items-center gap-2">
-            <Button type="button">
-              <Link href="/user/login">Login / Sign Up</Link>
-            </Button>
+            {status === "loading" ? (
+              <p>processing...</p>
+            ) : (
+              <Button type="button">
+                <Link href="/user/login">Login / Sign Up</Link>
+              </Button>
+            )}
             <ModeToggle />
           </div>
         </nav>
@@ -35,14 +39,16 @@ export default function Navbar() {
           <Link href="/">Vide Paywall</Link>
         </h1>
         <div className="flex items-center gap-2">
-          <Button
-            onClick={() => signOut()}
-            variant={"destructive"}
-            type="button"
-          >
-            <LogOut />
-            <span>Logout</span>
-          </Button>
+          {status === "authenticated" && (
+            <Button
+              onClick={() => signOut()}
+              variant={"destructive"}
+              type="button"
+            >
+              <LogOut />
+              <span>Logout</span>
+            </Button>
+          )}
           <ModeToggle />
         </div>
       </nav>

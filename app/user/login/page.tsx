@@ -40,7 +40,7 @@ export default function LoginPage() {
       });
 
       console.log("res", res);
-      if (!res) {
+      if (!res?.url) {
         return toast.error("An Error Occurred.Login Failed");
       }
 

@@ -22,7 +22,7 @@ export default {
           placeholder: "Type Password",
         },
       },
-      authorize: async (credentials) => {
+      authorize: async (credentials): Promise<User | null> => {
         // Validate credentials input
         if (
           !credentials ||
@@ -37,15 +37,6 @@ export default {
           const userExist = await prisma.user.findUnique({
             where: {
               email: credentials.email,
-            },
-            select: {
-              id: true,
-              name: true,
-              email: true,
-              password: true,
-              avatar_url: true,
-              isPrime: true,
-              Session: true,
             },
           });
 
@@ -67,10 +58,13 @@ export default {
           // Return user object for session
           return {
             id: userExist.id,
+            createdAt: userExist.createdAt,
+            updatedAt: userExist.updatedAt,
             name: userExist.name,
             email: userExist.email,
-            avatar_url: userExist.avatar_url,
-            isPrime: userExist.isPrime,
+            password: userExist.password,
+            emailVerified: userExist.emailVerified,
+            image: userExist.image,
           };
         } catch (error) {
           // Log the error for debugging
@@ -130,6 +124,7 @@ export default {
 
 // Extend session types (in next-auth.d.ts)
 import { DefaultSession } from "next-auth";
+import { User } from "@prisma/client";
 
 declare module "next-auth" {
   interface Session {

@@ -15,10 +15,11 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useState } from "react";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function SignUpPage() {
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const {
     reset,
@@ -48,7 +49,7 @@ export default function SignUpPage() {
       }
       reset();
       toast.success(result?.message || "User Signed Up Successfully");
-      return redirect("/user/login");
+      return router.push("/user/login");
     } catch (error) {
       console.error(`Something went wrong. Please try again. ${error}`);
       return toast.error(error as string);
