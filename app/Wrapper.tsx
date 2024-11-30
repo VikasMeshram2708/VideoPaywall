@@ -2,6 +2,8 @@
 
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "react-hot-toast";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
 
 export const Wrapper = ({
   children,
@@ -10,8 +12,10 @@ export const Wrapper = ({
 }>) => {
   return (
     <SessionProvider>
-      {children}
-      <Toaster />
+      <Provider store={store}>
+        {children}
+        <Toaster />
+      </Provider>
     </SessionProvider>
   );
 };

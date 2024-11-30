@@ -80,6 +80,7 @@ export default {
       },
     }),
   ],
+  secret:process.env.AUTH_SECRET,
   session: {
     strategy: "jwt",
     maxAge: 60 * 60, // 1 hour
@@ -112,12 +113,6 @@ export default {
         session.user.isPrime = token.isPrime as boolean;
       }
       return session;
-    },
-  },
-  events: {
-    async signIn(message) {
-      // Optional: Log successful sign-ins
-      console.log("User signed in", message.user);
     },
   },
 } satisfies NextAuthConfig;

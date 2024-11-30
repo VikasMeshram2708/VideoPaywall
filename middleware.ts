@@ -1,14 +1,22 @@
 // export { auth as middleware } from "@/auth"
 
 import { auth } from "@/auth";
+import { NextResponse } from "next/server";
 
 export default auth((req) => {
-  if (!req.auth && req.nextUrl.pathname !== "/user/login") {
-    const newUrl = new URL("/user/login", req.nextUrl.origin);
-    return Response.redirect(newUrl);
+  const path = req.nextUrl.pathname;
+  const publicPath = new Set(["/user/login", "/user/signup"]);
+  const isPublicPath = publicPath.has(path);
+
+  if (!req.auth && !isPublicPath) {
+    return Response.redirect(new URL("/user/login", req.url));
   }
+  if (req.auth && isPublicPath) {
+    return Response.redirect(new URL("/", req.url));
+  }
+  return NextResponse.next();
 });
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/", "/user/login", "/user/signup", "/user/:path*"],
 };
